@@ -1,3 +1,4 @@
+import os
 import argparse
 from models.random_model_trainer import RandomModelTrainer
 
@@ -11,15 +12,19 @@ if __name__ == '__main__':
                         help="Specifies number of models to generate. If 1, returns an untrained model.")
     parser.add_argument("-i", "--interactive", action='store_true', required=False,
                         help="Specifies whether to enable interactive mode. If interactive mode is not enabled, all the models are trained.")
+    parser.add_argument("-p", "--path", default=os.path.join(os.getcwd(), "models"), required=False,
+                        help="Specifies the directory to save the class files if generated.")
     args = vars(parser.parse_args())
     obj = RandomModelTrainer(num_hidden_layers=args['hidden_layers'],
                              num_epochs=args['epochs'],
-                             num_models=args['num_of_models'])
+                             num_models=args['num_of_models'],
+                             dir_path=args['path'])
     obj.generate_random_models()
 
     if not args['interactive']:
-        # obj.view_models(models=None)
+        obj.view_models(models=None)
         obj.train_models(models=None)
+        obj.generate_class_files(models=None)
     else:
         print("\n\nInstructions for usage:")
         print("'V [indices]' : View the model(s) specified by a list of indices")
@@ -28,14 +33,22 @@ if __name__ == '__main__':
         print("'T [indices]' : Train the model(s) specified by a list of indices")
         print("              indices -> None | integer[,integer]")
         
-        print("'VD indices' : View a random example from the datasets.")
-        print("              indices -> train | test")
+        print("'VD set' : View a random example from the datasets.")
+        print("              set -> train | test")
 
-        print("'S [indices] path' : Save model(s) specified by a list of indices to the provided directory path")
+        print("'S [indices]' : Save model(s) specified by a list of indices")
         print("              indices -> None | integer[,integer]")
-        print("              path -> string (absolute path)")
+
+        print("'G [indices]' : Generate class files for model(s) specified by a list of indices")
+        print("              indices -> None | integer[,integer]")
         
         print("'exit' : Exit the interactive session.")
+        
+        print("Note: ")
+        print("\tNone: Executes command for all the models")
+        print("\tSingle Integer i: Executes command for ith model")
+        print("\tComma separated integers: Executes command for every model in the list")
+        
 
         command = input("\n>>> Enter instruction: ")
         while True:
@@ -44,19 +57,18 @@ if __name__ == '__main__':
 
             try:
                 instr, indices = command.split(' ')
-            except ValueError:
+            except ValueError as error:
                 print("Please enter valid input")
                 command = input("\n>>> Enter instruction: ")
                 continue
 
-            if instr not in ["V", "T", "S", "VD"]:
+            if instr not in ["V", "T", "S", "G", "VD"]:
                 print("Please enter valid input")
                 command = input("\n>>> Enter instruction: ")
                 continue
 
             if instr == "VD":
                 dataset_choice = indices
-                print("Choice is %s" % (dataset_choice))
             else:
                 if len(indices) == 0:
                     models = None
@@ -71,5 +83,7 @@ if __name__ == '__main__':
                 obj.train_models(models=models)
             elif instr == "VD":
                 obj.view_dataset_example(dataset=dataset_choice)
+            elif instr == "G":
+                obj.generate_class_files(models=models)
 
             command = input("\n>>> Enter instruction: ")

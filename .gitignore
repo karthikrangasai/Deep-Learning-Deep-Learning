@@ -1,5 +1,5 @@
 # Custom ignores
-models/m*.py
+models/model_[0-9]*.py
 .vscode/
 
 # Byte-compiled / optimized / DLL files

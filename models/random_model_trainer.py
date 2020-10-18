@@ -1,12 +1,13 @@
+import os
 import random
 import numpy as np
 import tensorflow as tf
 import tensorflow_datasets as tfds
 import matplotlib.pyplot as plt
-
+from .model_class_file_generator import generate_class_file
 
 class RandomModelTrainer:
-    def __init__(self, num_hidden_layers=2, num_epochs=15, num_models=4):
+    def __init__(self, num_hidden_layers=2, num_epochs=15, num_models=4, dir_path=None):
         self.num_hidden_layers = num_hidden_layers
         self.num_epochs = num_epochs
         self.num_models = num_models
@@ -15,7 +16,7 @@ class RandomModelTrainer:
         self.models = []
         self.batch_sizes = []
         self.train_dataset, self.test_dataset, self.dataset_info = None, None, None
-        # self.__load_datasets()
+        self.dir_path = dir_path
 
     def __load_datasets(self):
         def _normalize_img(img, label):
@@ -81,7 +82,7 @@ class RandomModelTrainer:
             for i in range(0, len(self.models)-1):
                 self.__train_model(i)
         elif isinstance(models, int):
-            self.__train_model(models)
+            self.__train_model(models-1)
         elif isinstance(models, list):
             for i in models:
                 self.__train_model(int(i)-1)
@@ -97,11 +98,11 @@ class RandomModelTrainer:
             train_dataset = self.train_dataset.shuffle(1024).batch(self.batch_sizes[index])
             test_dataset = self.test_dataset.batch(self.batch_sizes[index])
             
-            print("[INFO] Starting training for model %d: " % (index))
+            print("[INFO] Starting training for model %d: " % (index+1))
             history = model.fit(train_dataset, epochs=self.num_epochs, 
                                 validation_data=test_dataset)
             print(history)
-            print("[INFO] Model %d trained!" % (index))
+            print("[INFO] Model %d trained!" % (index+1))
 
         except IndexError:
             print("[ERROR] Please enter the correct model index number(s)")
@@ -114,7 +115,32 @@ class RandomModelTrainer:
         
         if dataset == "train":
             fig = tfds.show_examples(self.train_dataset, self.dataset_info)
-            plt.show()
         else:
             fig = tfds.show_examples(self.test_dataset, self.dataset_info)
-            plt.show()
+        
+        plt.show()
+    
+    def generate_class_files(self, models=None):
+        if models is None:
+            for i in range(0, len(self.models)-1):
+                self.__generate_class_file(i)
+        elif isinstance(models, int):
+            self.__generate_class_file(models-1)
+        elif isinstance(models, list):
+            for i in models:
+                self.__generate_class_file(int(i)-1)
+        else:
+            print("[ERROR] Type mismatch for argument 'models'")
+    
+    def __generate_class_file(self, index):
+        try:
+            model = self.models[index]
+            if self.dir_path is not None:
+                file_path = os.path.join(self.dir_path, "model_%d.py"%(index+1))
+                generate_class_file(model, file_path)
+                print("[INFO] Class file generated for the model %d!" % (index+1))
+            else:
+                print("[ERROR] Destination directory not specified, cannot save class file.")
+
+        except IndexError:
+            print("[ERROR] Please enter the correct model index number(s)")
