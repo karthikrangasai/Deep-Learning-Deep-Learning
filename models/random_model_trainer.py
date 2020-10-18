@@ -14,16 +14,15 @@ class RandomModelTrainer:
         self.ACTIVATIONS = ["relu", "cosine", "softplus", "sigmoid", "tanh"]
         self.models = []
         self.batch_sizes = []
-        self.train_dataset, self.test_dataset = None, None
+        self.train_dataset, self.test_dataset, self.dataset_info = None, None, None
+        # self.__load_datasets()
 
     def __load_datasets(self):
         def _normalize_img(img, label):
             img = tf.cast(img, tf.float32) / 255.
             return (img, label)
 
-        self.train_dataset, self.test_dataset = tfds.load(name="mnist", 
-                                                          split=['train', 'test'], 
-                                                          as_supervised=True)
+        [self.train_dataset, self.test_dataset], self.dataset_info = tfds.load(name="mnist", split=['train', 'test'], as_supervised=True, with_info=True)
         self.train_dataset = self.train_dataset.map(_normalize_img)
         self.test_dataset = self.test_dataset.map(_normalize_img)
     
@@ -106,3 +105,16 @@ class RandomModelTrainer:
 
         except IndexError:
             print("[ERROR] Please enter the correct model index number(s)")
+    
+    def view_dataset_example(self, dataset='train'):
+        if dataset not in ['train', 'test']:
+            print("error")
+        if self.train_dataset is None or self.test_dataset is None:
+            self.__load_datasets()
+        
+        if dataset == "train":
+            fig = tfds.show_examples(self.train_dataset, self.dataset_info)
+            plt.show()
+        else:
+            fig = tfds.show_examples(self.test_dataset, self.dataset_info)
+            plt.show()
