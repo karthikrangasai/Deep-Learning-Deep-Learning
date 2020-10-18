@@ -13,6 +13,7 @@ class RandomModelTrainer:
         self.BATCH_SIZES = [2**i for i in range(0, 10)]
         self.ACTIVATIONS = ["relu", "cosine", "softplus", "sigmoid", "tanh"]
         self.models = []
+        self.batch_sizes = []
         self.train_dataset, self.test_dataset = None, None
         self.__load_datasets()
 
@@ -31,8 +32,7 @@ class RandomModelTrainer:
 
             batch_size = self.BATCH_SIZES[random.randint(0, len(self.BATCH_SIZES)-1)]
             print("\t[INFO] Using batch size of %d" % (batch_size))
-            train_dataset = train_dataset.shuffle(1024).batch(batch_size)
-            test_dataset = test_dataset.batch(batch_size)
+            self.batch_sizes.append(batch_size)
 
             model = tf.keras.models.Sequential()
             model.add(tf.keras.layers.Flatten(input_shape=(28, 28, 1)))
@@ -87,6 +87,8 @@ class RandomModelTrainer:
         tf.keras.backend.clear_session()
         try:
             model = self.models[index]
+            self.train_dataset = train_dataset.shuffle(1024).batch(self.batch_sizes[index])
+            self.test_dataset = test_dataset.batch(self.batch_sizes[index])
             model.compile(
                 loss='sparse_categorical_crossentropy',
                 optimizer=tf.keras.optimizers.SGD(),
@@ -99,5 +101,8 @@ class RandomModelTrainer:
                                 validation_data=self.test_dataset)
             print(history)
             print("[INFO] Model %d trained!" % (index))
+            self.train_dataset.unbatch()
+            self.test_dataset.unbatch()
+
         except IndexError:
             print("[ERROR] Please enter the correct index number(s) to train the model(s)")
