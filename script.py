@@ -22,11 +22,11 @@ if __name__ == '__main__':
         obj.train_models(models=None)
     else:
         print("Instructions for usage:")
-        print("'V indices' : View the Vth model(s)")
+        print("'V [indices]' : View the model(s) specified by a list of indices")
         print("              indices -> None | integer[,integer]")
-        print("'T indices' : Train the Tth model(s)")
+        print("'T [indices]' : Train the model(s) specified by a list of indices")
         print("              indices -> None | integer[,integer]")
-        print("'S indices' : Save model(s) S")
+        print("'S [indices]' : Save model(s) specified by a list of indices")
         print("              indices -> None | integer[,integer]")
         print("'exit' : Exit the interactive session.")
 
@@ -38,7 +38,7 @@ if __name__ == '__main__':
                 command = input("Enter instruction: ")
                 continue
 
-            if len(indices) == 0 or len(instr) == 1:
+            if len(indices) == 0:
                 models = None
             elif len(indices) == 1:
                 models = int(indices)
