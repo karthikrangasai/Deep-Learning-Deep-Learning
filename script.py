@@ -22,11 +22,11 @@ if __name__ == '__main__':
         obj.train_models(models=None)
     else:
         print("Instructions for usage:")
-        print("'V indices' : View the models at indices less than number of models.")
+        print("'V indices' : View the Vth model(s)")
         print("              indices -> None | integer[,integer]")
-        print("'T indices' : Train the models at indices less than number of models.")
+        print("'T indices' : Train the Tth model(s)")
         print("              indices -> None | integer[,integer]")
-        print("'S indices' : Save the models at indices less than number of models.")
+        print("'S indices' : Save model(s) S")
         print("              indices -> None | integer[,integer]")
         print("'exit' : Exit the interactive session.")
 
@@ -38,16 +38,16 @@ if __name__ == '__main__':
                 command = input("Enter instruction: ")
                 continue
 
-            if len(indices) == 0:
+            if len(indices) == 0 or len(instr) == 1:
                 models = None
             elif len(indices) == 1:
                 models = int(indices)
             else:
                 models = [int(x) for x in indices.split(',')]
             
-            if instr is "V":
+            if instr == "V":
                 obj.view_models(models=models)
-            elif instr is "T":
+            elif instr == "T":
                 obj.train_models(models=models)
             else:
                 break

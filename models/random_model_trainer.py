@@ -15,15 +15,17 @@ class RandomModelTrainer:
         self.models = []
         self.batch_sizes = []
         self.train_dataset, self.test_dataset = None, None
-        self.__load_datasets()
 
     def __load_datasets(self):
         def _normalize_img(img, label):
             img = tf.cast(img, tf.float32) / 255.
             return (img, label)
-        train_dataset, test_dataset = tfds.load(name="mnist", split=['train', 'test'], as_supervised=True)
-        self.train_dataset = train_dataset.map(_normalize_img)
-        self.test_dataset = test_dataset.map(_normalize_img)
+
+        self.train_dataset, self.test_dataset = tfds.load(name="mnist", 
+                                                          split=['train', 'test'], 
+                                                          as_supervised=True)
+        self.train_dataset = self.train_dataset.map(_normalize_img)
+        self.test_dataset = self.test_dataset.map(_normalize_img)
     
     def generate_random_models(self):
         random.seed(666)
@@ -50,6 +52,10 @@ class RandomModelTrainer:
                 model.add(tf.keras.layers.Dense(hidden_units, activation=activation_fn))
 
             model.add(tf.keras.layers.Dense(10, activation='softmax'))
+            model.compile(
+                loss='sparse_categorical_crossentropy',
+                optimizer=tf.keras.optimizers.SGD(),
+                metrics=['accuracy'])
 
             self.models.append(model)
 
@@ -69,7 +75,7 @@ class RandomModelTrainer:
                 except IndexError:
                     print("[ERROR] Please enter the correct index number(s) to view the model(s)")
         else:
-            print("[ERROR] Type mismatch for arguement 'models'")
+            print("[ERROR] Type mismatch for argument 'models'")
 
     def train_models(self, models=None):
         if models is None:
@@ -81,28 +87,22 @@ class RandomModelTrainer:
             for i in models:
                 self.__train_model(int(i)-1)
         else:
-            print("[ERROR] Type mismatch for arguement 'models'")
+            print("[ERROR] Type mismatch for argument 'models'")
     
     def __train_model(self, index):
         tf.keras.backend.clear_session()
         try:
             model = self.models[index]
-            self.train_dataset = train_dataset.shuffle(1024).batch(self.batch_sizes[index])
-            self.test_dataset = test_dataset.batch(self.batch_sizes[index])
-            model.compile(
-                loss='sparse_categorical_crossentropy',
-                optimizer=tf.keras.optimizers.SGD(),
-                metrics=['accuracy', tf.keras.metrics.Precision()])
-            if self.train_dataset is None and self.test_dataset is None:
+            if self.train_dataset is None or self.test_dataset is None:
                 self.__load_datasets()
+            train_dataset = self.train_dataset.shuffle(1024).batch(self.batch_sizes[index])
+            test_dataset = self.test_dataset.batch(self.batch_sizes[index])
             
-            print("[INFO] Starting Training for Model %d: " % (index))
-            history = model.fit(self.train_dataset, epochs=self.num_epochs, 
-                                validation_data=self.test_dataset)
+            print("[INFO] Starting training for model %d: " % (index))
+            history = model.fit(train_dataset, epochs=self.num_epochs, 
+                                validation_data=test_dataset)
             print(history)
             print("[INFO] Model %d trained!" % (index))
-            self.train_dataset.unbatch()
-            self.test_dataset.unbatch()
 
         except IndexError:
-            print("[ERROR] Please enter the correct index number(s) to train the model(s)")
+            print("[ERROR] Please enter the correct model index number(s)")
