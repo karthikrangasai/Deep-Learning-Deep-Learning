@@ -13,6 +13,7 @@ class RandomModelTrainer:
         self.BATCH_SIZES = [2**i for i in range(0, 10)]
         self.ACTIVATIONS = ["relu", "cosine", "softplus", "sigmoid", "tanh"]
         self.models = []
+        self.batch_sizes = []
         self.train_dataset, self.test_dataset = None, None
         self.__load_datasets()
 
@@ -27,27 +28,25 @@ class RandomModelTrainer:
     def generate_random_models(self):
         random.seed(666)
         for model_number in range(self.num_models):
-            tf.keras.backend.clear_session()
             print("[INFO] Creating model number %d" % (model_number))
 
             batch_size = self.BATCH_SIZES[random.randint(0, len(self.BATCH_SIZES)-1)]
-            print("[INFO]     Using batch size of %d" % (batch_size))
-            train_dataset = train_dataset.shuffle(1024).batch(batch_size)
-            test_dataset = test_dataset.batch(batch_size)
+            print("\t[INFO] Using batch size of %d" % (batch_size))
+            self.batch_sizes.append(batch_size)
 
             model = tf.keras.models.Sequential()
             model.add(tf.keras.layers.Flatten(input_shape=(28, 28, 1)))
 
             num_of_hidden_layers = random.randint(0, self.num_hidden_layers)
-            print("[INFO]     Using %d hidden layers" % (num_of_hidden_layers))
+            print("\t[INFO] Using %d hidden layers" % (num_of_hidden_layers))
 
             for layer in range(num_of_hidden_layers):
                 activation_fn = self.ACTIVATIONS[random.randint(0, len(self.ACTIVATIONS)-1)]
-                print("[INFO]         Using hidden layer %d activation : %s" % (layer, activation_fn))
+                print("\t[INFO] Using hidden layer %d activation : %s" % (layer, activation_fn))
                 if activation_fn == "cosine":
                     activation_fn = tf.math.cos
                 hidden_units = random.randint(10, 784)
-                print("[INFO]         Using %d neurons in hidden layer %d" % (hidden_units, layer))
+                print("\t[INFO] Using %d neurons in hidden layer %d" % (hidden_units, layer))
                 model.add(tf.keras.layers.Dense(hidden_units, activation=activation_fn))
 
             model.add(tf.keras.layers.Dense(10, activation='softmax'))
@@ -68,7 +67,7 @@ class RandomModelTrainer:
                 try:
                     self.models[int(i)-1].summary()
                 except IndexError:
-                    print("Please enter the corrent index number(s) to view the model(s)")
+                    print("[ERROR] Please enter the correct index number(s) to view the model(s)")
         else:
             print("[ERROR] Type mismatch for arguement 'models'")
 
@@ -85,8 +84,11 @@ class RandomModelTrainer:
             print("[ERROR] Type mismatch for arguement 'models'")
     
     def __train_model(self, index):
+        tf.keras.backend.clear_session()
         try:
             model = self.models[index]
+            self.train_dataset = train_dataset.shuffle(1024).batch(self.batch_sizes[index])
+            self.test_dataset = test_dataset.batch(self.batch_sizes[index])
             model.compile(
                 loss='sparse_categorical_crossentropy',
                 optimizer=tf.keras.optimizers.SGD(),
@@ -99,5 +101,8 @@ class RandomModelTrainer:
                                 validation_data=self.test_dataset)
             print(history)
             print("[INFO] Model %d trained!" % (index))
+            self.train_dataset.unbatch()
+            self.test_dataset.unbatch()
+
         except IndexError:
-            print("Please enter the corrent index number(s) to train the model(s)")
+            print("[ERROR] Please enter the correct index number(s) to train the model(s)")
