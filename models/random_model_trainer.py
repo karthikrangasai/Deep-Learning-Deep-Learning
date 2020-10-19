@@ -79,7 +79,7 @@ class RandomModelTrainer:
 
     def train_models(self, models=None):
         if models is None:
-            for i in range(0, len(self.models)-1):
+            for i in range(self.num_models):
                 self.__train_model(i)
         elif isinstance(models, int):
             self.__train_model(models-1)
@@ -122,7 +122,7 @@ class RandomModelTrainer:
     
     def generate_class_files(self, models=None):
         if models is None:
-            for i in range(0, len(self.models)-1):
+            for i in range(self.num_models):
                 self.__generate_class_file(i)
         elif isinstance(models, int):
             self.__generate_class_file(models-1)
@@ -144,3 +144,31 @@ class RandomModelTrainer:
 
         except IndexError:
             print("[ERROR] Please enter the correct model index number(s)")
+
+    def save_models(self, models):
+        folder = input("Enter directory path to save models in : ")
+        if not os.path.exists(folder):
+            os.mkdir(folder)
+        if models is None:
+            try:
+                for i in range(self.num_models):
+                    path = os.path.join(folder, "model-"+str(i+1))
+                    self.models[i].save(path)
+                    print("[INFO] Saved model %d to %s" % (i+1, path))
+            except:
+                print("[ERROR] There was an error. Check your file permissions or model index")
+        elif isinstance(models, int):
+            try:
+                path = os.path.join(folder, "model-"+str(models))
+                self.models[models-1].save(path)
+                print("[INFO] Saved model %d to %s" % (models, path))
+            except:
+                print("[ERROR] There was an error. Check your file permissions or model index")
+        elif isinstance(models, list):
+            try:
+                for i in models:
+                    path = os.path.join(folder, "model-"+str(i))
+                    self.models[i-1].save(path)
+                    print("[INFO] Saved model %d to %s" % (i, path))
+            except:
+                print("[ERROR] There was an error. Check your file permissions or model index")
