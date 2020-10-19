@@ -85,5 +85,7 @@ if __name__ == '__main__':
                 obj.view_dataset_example(dataset=dataset_choice)
             elif instr == "G":
                 obj.generate_class_files(models=models)
+            elif instr == "S":
+                obj.save_models(models=models)
 
             command = input("\n>>> Enter instruction: ")
