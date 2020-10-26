@@ -55,10 +55,34 @@
 
 ## Machine Learning models being compared to:
 ### Support Vector Machines
-- Add the confusion matrix and accuracy graph here.
+- Accuracy : 0.9833
+- Optimal Hyperparameters : C -> 10, gamma -> 0.01, kernel -> rbf
+
+| Graph Type | Support Vector Machine |
+| :---------: | :---------: |
+| Training & Cross-validation score | ![Training & Cross-val Score](models/SVM.png "Training & Cross-val Score") |
+| Confusion Matrix | ![Confusion Matrix SVM](models/SVM_confusion_matrix.png "Confusion Matrix SVM") |
 ### Decision Trees
-- Add the confusion matrix and accuracy graph here.
+- Accuracy : 0.8868
+- Optimal Hyperparameters : criterion -> entropy, max-depth -> None, min-samples-leaf -> 1, min-weight-fraction-leaf -> 0.0
+
+| Graph Type | Decision Trees |
+| :---------: | :---------: |
+| Training & Cross-validation score | ![Training & Cross-val Score](models/DT.png "Training & Cross-val Score") |
+| Confusion Matrix | ![Confusion Matrix DT](models/DT_confusion_matrix.png "Confusion Matrix DT") |
 ### Logistic Regression
-- Add the confusion matrix and accuracy graph here.
+- Accuracy : 0.9256
+- Optimal Hyperparameters : penalty -> l2, solver -> lbfgs, max-iter -> 1000
+
+| Graph Type | Logistic Regression |
+| :---------: | :---------: |
+| Training & Cross-validation score | ![Training & Cross-val Score](models/LogisticRegression.png "Training & Cross-val Score") |
+| Confusion Matrix | ![Confusion Matrix LR](models/LogisticRegression_confusion_matrix.png "Confusion Matrix LR") |
 ### Random Forest
-- Add the confusion matrix and accuracy graph here.
+- Accuracy : 0.9698
+- Optimal Hyperparameters : criterion -> gini, max-depth -> None, min-samples-leaf -> 1, min-weight-fraction-leaf -> 0.0, n-estimators -> 100
+
+| Graph Type | Random Forest |
+| :---------: | :---------: |
+| Training & Cross-validation score | ![Training & Cross-val Score](models/RandomForest.png "Training & Cross-val Score") |
+| Confusion Matrix | ![Confusion Matrix RF](models/RandomForest_confusion_matrix.png "Confusion Matrix RF") |
