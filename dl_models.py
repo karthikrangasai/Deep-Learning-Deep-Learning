@@ -57,7 +57,6 @@ def get_models():
     model10.add(tf.keras.layers.Dense(387, activation='relu'))
     model10.add(tf.keras.layers.Dense(387, activation='relu'))
     model10.add(tf.keras.layers.Dense(387, activation='relu'))
-    model10.add(tf.keras.layers.Dense(387, activation='relu'))
     model10.add(tf.keras.layers.Dense(10, activation='softmax'))
 
     model11 = tf.keras.models.Sequential()
@@ -74,7 +73,7 @@ def get_models():
     model12.add(tf.keras.layers.Dense(512,activation='relu'))
     model12.add(tf.keras.layers.Dense(10, activation='softmax'))
 
-    models = [model1, model2, model3, model4, model5, model6, model7, model8, model9, model10, model1, model12]
+    models = [model1, model2, model3, model4, model5, model6, model7, model8, model9, model10, model11, model12]
 
     return models
 
