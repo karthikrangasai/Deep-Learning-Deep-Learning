@@ -1,3 +1,6 @@
+# Drive link for trained models and the dataset
+# https://drive.google.com/drive/folders/1BHXkD4BReFjodlyh8_PADFqxykT5sgkm?usp=sharing
+
 #-----------------------------------------------------IMPORTING LIBRARIES-----------------------------------------------------#
 
 import numpy as np

@@ -1,3 +1,4 @@
+seaborn
 Cython==0.29.21
 matplotlib==3.3.2
 numpy==1.18.5
