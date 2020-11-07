@@ -2,9 +2,9 @@
 A concise study on the hyperparameters of Deep Neural Networks
 
 ## Team:
-- Varun Parthasarathy
-- Siddarth Gopalakrishnan
-- Sivaraman Karthik Rangasai
+- [Varun Parthasarathy](https://github.com/varun-parthasarathy)
+- [Siddarth Gopalakrishnan](https://github.com/siddarthgopalakrishnan)
+- [Sivaraman Karthik Rangasai](https://github.com/karthikrangasai)
 
 ## Common Deep Learning Model Parameters:
 - Dataset used : MNIST
