@@ -1,10 +1,10 @@
-# Deep Learning Assignment 1
+# Deep Learning Deep Learning
 A concise study on the hyperparameters of Deep Neural Networks
 
 ## Team:
-- Varun Parthasarathy - 2017B3A70515H
-- Siddarth Gopalakrishnan - 2017B3A71379H
-- Sivaraman Karthik Rangasai - 2017B4A71499H
+- Varun Parthasarathy
+- Siddarth Gopalakrishnan
+- Sivaraman Karthik Rangasai
 
 ## Common Deep Learning Model Parameters:
 - Dataset used : MNIST
@@ -41,7 +41,7 @@ In order to tune the hyperparameters of the functions, we have used GridSearchCV
 - Accuracy : 0.9698
 - Optimal Hyperparameters : criterion -> gini, max-depth -> None, min-samples-leaf -> 1, min-weight-fraction-leaf -> 0.0, n-estimators -> 100
 - Explanation: 
-    - Random Forest is an ensemble learning method fits a number of decision trees on various samples of our dataset and gives output based on some averaging criteria of the individual trees.
+    - Random Forest is an ensemble learning method that fits a number of decision trees on various samples of our dataset and gives output based on some averaging criteria of the individual trees.
     - The parameters are all the same as the Decision Tree classifier with an additional parameter n_estimators, which determines the number of trees we want in our forest. More number of trees in the forest leads to better accuracy but can be computationally heavy.
     - Finally, on applying these parameters to our model, we got an accuracy of 0.9698 with an average f1-score of 0.97.
 
@@ -164,9 +164,9 @@ In order to tune the hyperparameters of the functions, we have used GridSearchCV
 | Model - Optimizer | Accuracy | Loss | Confusion Matrix |
 | :--------: | :-------: | :-------: | :-------: |
 | Model 5 - Adam | ![Model 5](models/model-5-accuracy.png "Model 5") | ![Model 5](models/model-5-loss.png "Model 5") | ![Model 5](models/model-5-confusion_matrix.png "Model 5") |
-| Model 5 - SGD | ![Model 5](models/sgd-model-5-loss.png "Model 5") | ![Model 5](models/sgd-model-5-loss.png "Model 5") | ![Model 5](models/sgd-model-5-confusion_matrix.png "Model 5") |
+| Model 5 - SGD | ![Model 5](models/sgd-model-5-accuracy.png "Model 5") | ![Model 5](models/sgd-model-5-loss.png "Model 5") | ![Model 5](models/sgd-model-5-confusion_matrix.png "Model 5") |
 | Model 10 - Adam | ![Model 10](models/model-10-accuracy.png "Model 5") | ![Model 10](models/model-10-loss.png "Model 10") | ![Model 10](models/model-10-confusion_matrix.png "Model 10") |
-| Model 10 - SGD | ![Model 10](models/sgd-model-10-loss.png "Model 5") | ![Model 10](models/sgd-model-10-loss.png "Model 10") | ![Model 10](models/sgd-model-10-confusion_matrix.png "Model 10") |
+| Model 10 - SGD | ![Model 10](models/sgd-model-10-accuracy.png "Model 5") | ![Model 10](models/sgd-model-10-loss.png "Model 10") | ![Model 10](models/sgd-model-10-confusion_matrix.png "Model 10") |
 
 
 ## IV. Observation: A comparison between the performances of the models
@@ -176,3 +176,5 @@ In order to tune the hyperparameters of the functions, we have used GridSearchCV
 - The general trend in the Deep Learning models described above is that all the models reach an accuracy of 90% or higher. Even the model that has 0 hidden layers achieves an accuracy close to 92%. This is not the case with the Machine Learning models, as we can see that the accuracy varies from model to model ranging from 88% to 98%. Hence, we can conclude that Deep Learning can produce better representations of the features.
 
 - The best among the Machine Learning models we trained was the Support Vector Machine model with an accuracy of 98%. This required the model to search every possible combination of the hyperparameter values for three KFolds, to output the most optimal model. On the other hand, the worst of the Deep Learning models we trained is "Model - 7", with an accuracy closer to 92%, although it doesn't have any hidden layers to produce better representations of the features. Here, we can see that the Deep Learning model, "Model - 7", performs considerably close enough to the Machine Learning model despite the mentioned drawback.
+
+- Neural Networks have a higher compuataional cost especially as the depth of the model increases.
